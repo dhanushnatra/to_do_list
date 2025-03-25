@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
   final ListChangeProvider listChangeProvider = Get.put(ListChangeProvider());
+  final TextEditingController _controller = TextEditingController();
 
   HomePage({super.key});
 
@@ -17,28 +18,27 @@ class HomePage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  TextEditingController textController =
-                      TextEditingController();
-                  return AlertDialog(
-                    title: Text("Add Item"),
-                    content: TextField(
-                      controller: textController,
-                      decoration: InputDecoration(hintText: "Enter item"),
-                    ),
-                    actions: [
-                      TextButton(
+              Get.defaultDialog(
+                title: "Add Item",
+                content: Center(
+                  child: Column(
+                    children: [
+                      TextField(
+                        controller: _controller,
+                        decoration: InputDecoration(hintText: "Enter item"),
+                      ),
+                      SizedBox(height: 10),
+                      ElevatedButton(
                         onPressed: () {
-                          listChangeProvider.addItem(textController.text);
-                          Navigator.of(context).pop();
+                          listChangeProvider.addItem(_controller.text);
+                          _controller.clear();
+                          Get.back();
                         },
                         child: Text("Add"),
                       ),
                     ],
-                  );
-                },
+                  ),
+                ),
               );
             },
           ),
